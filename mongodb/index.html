@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html id="mongodb-gridfs" lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>基于MongoDB和GridFS的分布式系统</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="UI, Schema, HTML, CSS, JS, JavaScript, front-end, framework, web development">
+    <meta name="description" content="A cutting edge, lightweight, and powerful front-end framework for faster and easier web development">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://arxitics.github.io/ui-schema/dist/ui-schema-0.4.5.min.css" media="all">
+    <link rel="stylesheet" href="https://arxitics.github.io/ui-schema/dist/prism-1.4.1.min.css" media="all">
+  </head>
+  <body class="ui-overflow-hidden">
+    <div class="ui-slides-wrapper">
+      <section class="ui-page-slide" id="cover">
+        <div>
+          <h2>基于MongoDB和GridFS的分布式系统</h2>
+          <ul class="ui-list-unstyled ui-zoom-large">
+            <li><i class="ui-fixed-width" data-schema-icon="user"></i> 潘瓒（飞龙）</li>
+            <li><i class="ui-fixed-width" data-schema-icon="group"></i> 数空科技 · 可视化工作坊</li>
+            <li><i class="ui-fixed-width" data-schema-icon="envelope"></i> panzan@bigdata-x.com</li>
+            <li><i class="ui-fixed-width" data-schema-icon="calendar"></i> 2017-09-17</li>
+          </ul>
+        </div>
+      </section>
+      <section class="ui-page-slide" id="db-ranks">
+        <div>
+          <h3>数据库排名</h3>
+          <img class="ui-image-fluid" src="./images/db-ranks.png" alt="数据库排名">
+          <a class="ui-float-right ui-skip-medium" href="https://db-engines.com/en/ranking" tabindex="-1">
+            <code class="ui-zoom-small">https://db-engines.com/en/ranking</code>
+          </a>
+        </div>
+      </section>
+      <section class="ui-page-slide" id="mongodb-features">
+        <div>
+          <h3>MongoDB特色</h3>
+          <div class="ui-container-grid ui-skip-huge">
+            <div class="ui-grid-33 ui-text-center">
+              <div class="ui-frame-stadium ui-background-primary">动态文档模型 <br> BSON</div>
+            </div>
+            <div class="ui-grid-33 ui-text-center">
+              <div class="ui-frame-stadium ui-background-primary">高可用性 <br> Replica Set</div>
+            </div>
+            <div class="ui-grid-33 ui-text-center">
+              <div class="ui-frame-stadium ui-background-primary">水平扩展 <br> Sharding</div>
+            </div>
+          </div>
+          <div class="ui-container-grid ui-skip-huge">
+            <div class="ui-grid-33 ui-text-center">
+              <div class="ui-frame-stadium ui-background-info">二级索引</div>
+            </div>
+            <div class="ui-grid-33 ui-text-center">
+              <div class="ui-frame-stadium ui-background-info">高性能读写</div>
+            </div>
+            <div class="ui-grid-33 ui-text-center">
+              <div class="ui-frame-stadium ui-background-info">聚合框架</div>
+            </div>
+          </div>
+          <div class="ui-container-grid ui-skip-huge">
+            <div class="ui-grid-33 ui-text-center">
+              <div class="ui-frame-stadium ui-background-info">部分索引</div>
+            </div>
+            <div class="ui-grid-33 ui-text-center">
+              <div class="ui-frame-stadium ui-background-info">多存储引擎</div>
+            </div>
+            <div class="ui-grid-33 ui-text-center">
+              <div class="ui-frame-stadium ui-background-info">MapReduce</div>
+            </div>
+          </div>
+          <div class="ui-container-grid ui-skip-huge">
+            <div class="ui-grid-33 ui-text-center">
+              <div class="ui-frame-stadium ui-background-info">全文搜索</div>
+            </div>
+            <div class="ui-grid-33 ui-text-center">
+              <div class="ui-frame-stadium ui-background-info">地理位置查询</div>
+            </div>
+            <div class="ui-grid-33 ui-text-center">
+              <div class="ui-frame-stadium ui-background-info">GridFS</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="ui-page-slide" id="mongodb-intro">
+        <div>
+          <h3>MongoDB简介</h3>
+          <div class="ui-container-grid">
+            <div class="ui-grid-50">
+              <img class="ui-image-fluid ui-skip-huge" src="./images/mongodb-collection.svg" alt="MongoDB文档集">
+              <img class="ui-image-fluid ui-skip-huge" src="./images/bson-logo.png" alt="BSON">
+            </div>
+            <div class="ui-grid-40 ui-offset-10">
+              <table class="ui-table-fluid ui-skip-tiny">
+                <thead>
+                  <tr>
+                   <th>SQL</th>
+                   <th>MongoDB</th>
+                 </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>database</td>
+                    <td>database</td>
+                  </tr>
+                  <tr>
+                    <td>table</td>
+                    <td>collection</td>
+                  </tr>
+                  <tr>
+                    <td>row</td>
+                    <td>document</td>
+                  </tr>
+                  <tr>
+                    <td>column</td>
+                    <td>field</td>
+                  </tr>
+                  <tr>
+                    <td>primary key</td>
+                    <td>_id</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="ui-page-slide" id="gridfs-intro">
+        <div>
+          <h3>GridFS简介</h3>
+          <div class="ui-container-grid">
+            <div class="ui-grid-50">
+              <div class="ui-container-responsive">
+                <strong class="ui-absolute-right ui-text-button ui-zoom-small" data-schema-copy>fs.files</strong>
+                <pre><code class="language-javascript">{
+  "_id": &lt;ObjectId&gt;,
+  "length": &lt;num&gt;,
+  "chunkSize": &lt;num&gt;,
+  "uploadDate": &lt;timestamp&gt;,
+  "md5": &lt;hash&gt;,
+  "filename": &lt;string&gt;,
+  "contentType": &lt;string&gt;,
+  "aliases": &lt;string array&gt;,
+  "metadata": &lt;any&gt;
+}</code></pre>
+              </div>
+            </div>
+            <div class="ui-grid-50">
+              <div class="ui-container-responsive">
+                <strong class="ui-absolute-right ui-text-button ui-zoom-small" data-schema-copy>fs.chunks</strong>
+                <pre><code class="language-javascript">{
+  "_id": &lt;ObjectId&gt;,
+  "files_id": &lt;ObjectId&gt;,
+  "n": &lt;num>,
+  "data": &lt;binary&gt;
+}</code></pre>
+              </div>
+              <div class="ui-container-responsive ui-skip-large">
+                <strong class="ui-absolute-right ui-text-button ui-zoom-small" data-schema-copy>mongofiles</strong>
+                <pre><code class="language-bash">
+mongofiles -d records put foo.txt
+mongofiles -d records get foo.txt
+</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <ol class="ui-nav-pagination ui-fixed-bottom ui-offset-medium">
+      <li><a href="#cover" accesskey="0" title="封面"> </a></li>
+      <li><a href="#db-ranks" accesskey="1" title="数据库排名"> </a></li>
+      <li><a href="#mongodb-features" accesskey="2" title="MongoDB特色"> </a></li>
+      <li><a href="#mongodb-intro" accesskey="3" title="MongoDB简介"> </a></li>
+      <li><a href="#gridfs-intro" accesskey="4" title="GridFS简介"> </a></li>
+    </ol>
+    <script src="https://arxitics.github.io/ui-schema/dist/jquery-3.2.1.min.js"></script>
+    <script src="https://arxitics.github.io/ui-schema/dist/prism-1.4.1.min.js"></script>
+    <script src="https://arxitics.github.io/ui-schema/dist/ui-schema-0.4.5.min.js"></script>
+    <script src="https://arxitics.github.io/ui-schema/dist/icons/account.js"></script>
+  </body>
+</html>
