@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html id="mongodb-gridfs" lang="zh-CN">
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>基于MongoDB和GridFS的分布式系统</title>
+    <title>基于MongoDB和Hadoop的分布式系统</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="keywords" content="MongoDB,GridFS,分布式系统">
-    <meta name="description" content="基于MongoDB和GridFS的分布式系统">
+    <meta name="keywords" content="MongoDB,GridFS,Hadoop">
+    <meta name="description" content="基于MongoDB和Hadoop的分布式系统">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://arxitics.github.io/ui-schema/dist/ui-schema-0.4.5.min.css" media="all">
     <link rel="stylesheet" href="https://arxitics.github.io/ui-schema/dist/prism-1.4.1.min.css" media="all">
@@ -14,10 +14,10 @@
     <div class="ui-slides-wrapper">
       <section class="ui-page-slide" id="cover">
         <div>
-          <h2>基于MongoDB和GridFS的分布式系统</h2>
+          <h2>基于MongoDB和Hadoop的分布式系统</h2>
           <ul class="ui-list-unstyled ui-zoom-large">
             <li><i class="ui-fixed-width" data-schema-icon="user"></i> 潘瓒（飞龙）</li>
-            <li><i class="ui-fixed-width" data-schema-icon="group"></i> 数空科技 · 可视化工作坊</li>
+            <li><i class="ui-fixed-width" data-schema-icon="group"></i> 数空科技 · 有理数科技</li>
             <li><i class="ui-fixed-width" data-schema-icon="envelope"></i> panzan@bigdata-x.com</li>
             <li><i class="ui-fixed-width" data-schema-icon="calendar"></i> 2017-09-17</li>
           </ul>
@@ -124,7 +124,7 @@
           </div>
         </div>
       </section>
-      <section class="ui-page-slide" id="gridfs-intro">
+      <section class="ui-page-slide" id="mongodb-gridfs">
         <div>
           <h3>GridFS简介</h3>
           <div class="ui-container-grid">
@@ -165,13 +165,43 @@ mongofiles -d records get foo.txt
           </div>
         </div>
       </section>
+      <section class="ui-page-slide" id="hadoop-spark">
+        <div>
+          <h3>Hadoop vs Spark</h3>
+          <div class="ui-container-grid">
+            <div class="ui-grid-40 ui-skip-large">
+              <a href="https://www.tutorialspoint.com/hadoop/hadoop_introduction.htm">
+                <img class="ui-image-fluid" src="./images/hadoop-architecture.jpg" alt="Hadoop的架构">
+              </a>
+            </div>
+            <div class="ui-grid-40 ui-offset-20">
+              <a href="https://blog.cloudera.com/blog/2014/03/apache-spark-a-delight-for-developers/">
+                <img class="ui-image-fluid" src="./images/hadoop-spark-benchmark.png" alt="Hadoop和Spark的性能测试">
+              </a>
+              <a href="https://spark.apache.org/">
+                <img class="ui-image-fluid" src="./images/spark-data-sources.png" alt="Spark支持多种数据源">
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="ui-page-slide" id="mongodb-hadoop">
+        <h3 class="ui-text-hidden">MongoDB &amp; Hadoop</h3>
+        <div>
+          <a href="https://www.mongodb.com/hadoop-and-mongodb">
+            <img class="ui-image-fluid" src="./images/mongodb-hadoop.png" alt="MongoDB &amp; Hadoop">
+          </a>
+        </div>
+      </section>
     </div>
     <ol class="ui-nav-pagination ui-fixed-bottom ui-offset-medium">
       <li><a href="#cover" accesskey="0" title="封面"> </a></li>
       <li><a href="#db-ranks" accesskey="1" title="数据库排名"> </a></li>
       <li><a href="#mongodb-features" accesskey="2" title="MongoDB特色"> </a></li>
       <li><a href="#mongodb-intro" accesskey="3" title="MongoDB简介"> </a></li>
-      <li><a href="#gridfs-intro" accesskey="4" title="GridFS简介"> </a></li>
+      <li><a href="#mongodb-gridfs" accesskey="4" title="GridFS简介"> </a></li>
+      <li><a href="#hadoop-spark" accesskey="4" title="Hadoop vs Spark"> </a></li>
+      <li><a href="#mongodb-hadoop" accesskey="5" title="MongoDB &amp; Hadoop"> </a></li>
     </ol>
     <script src="https://arxitics.github.io/ui-schema/dist/jquery-3.2.1.min.js"></script>
     <script src="https://arxitics.github.io/ui-schema/dist/prism-1.4.1.min.js"></script>
