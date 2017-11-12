@@ -48,9 +48,10 @@ var schema = jQuery.isPlainObject(schema) ? schema : {};
       validate: 'schema-validate',
       changed: 'schema-changed',
       disabled: 'schema-disabled',
+      required: 'schema-required',
       rating: 'schema-rating',
-      score: 'schema-score',
       icons: 'schema-icons',
+      tagging: 'schema-tagging',
       lazyload: 'schema-lazyload',
       delay: 'schema-delay',
       src: 'schema-src',
@@ -110,7 +111,12 @@ var schema = jQuery.isPlainObject(schema) ? schema : {};
       rating: {
         type: 'rating',
         namespace: '.form.data-api.schema',
-        selector: 'form[data-schema-rating]'
+        selector: 'input[data-schema-rating]'
+      },
+      tagging: {
+        type: 'tagging',
+        namespace: '.form.data-api.schema',
+        selector: 'input[data-schema-tagging]'
       },
       lazyload: {
         type: 'lazyload',
@@ -624,30 +630,25 @@ var schema = jQuery.isPlainObject(schema) ? schema : {};
     var selector = events.rating.selector;
     var $elements = $(options && options.selector || selector);
     $elements.each(function () {
-      var $form = $(this);
-      var $icons = $form.find('a > i');
-      var $parent = $icons.parent();
-      var $data = schema.parseData($parent.data());
+      var $input = $(this);
+      var $form = $input.closest('form');
+      var $anchor = $input.next();
+      var $icons = $anchor.find('i');
+      var $data = schema.parseData($anchor.data());
       var icons = $data.icons.split(/\s*\,\s*/);
-      var score = $data.score || 0;
+      var score = Number($input.val() || 0);
       var integer = Math.round(score);
       var rounding = Math.abs(score - integer);
       var empty = icons.shift();
       var full = icons.pop();
       var half = icons.pop();
-      $icons.each(function (index) {
+      $anchor.on('mouseenter', 'i', function () {
         var $icon = $(this);
-        $icon.on('mouseenter', function () {
-          $icon.prevAll().addBack().data(icon, full);
-          $icon.nextAll().data(icon, empty);
-          schema.trigger(events.sprite, $icons);
-        });
-        $icon.on('click', function () {
-          $parent.prev('input[type="hidden"]').val(index + 1);
-          $form.submit();
-        });
+        $icon.prevAll().addBack().data(icon, full);
+        $icon.nextAll().data(icon, empty);
+        schema.trigger(events.sprite, $icons);
       });
-      $parent.on('mouseleave', function () {
+      $anchor.on('mouseleave', function () {
         $icons.slice(integer).data(icon, empty);
         if (integer > 0) {
           $icons.slice(0, integer).data(icon, full);
@@ -657,7 +658,96 @@ var schema = jQuery.isPlainObject(schema) ? schema : {};
         }
         schema.trigger(events.sprite, $icons);
       });
+      $anchor.on('click', 'i', function () {
+        var index = $(this).prevAll().length;
+        $input.val(index + 1);
+        $form.submit();
+      });
     });
+  };
+
+  // Tagging
+  schema.tagging = function (event, options) {
+    var events = schema.events;
+    var selector = events.tagging.selector;
+    var $elements = $(options && options.selector || selector);
+    $elements.each(function () {
+      var $input = $(this);
+      var $data = schema.parseData($input.data());
+      var $parent = $input.parent();
+      var $select = $input.next();
+      var $output = $select.is(':last-child') ? $parent.next() : $select.next();
+      var $span = $output.find('span:first-child');
+      var $form = $input.closest('form');
+      var required = $data.required;
+      var init = $input.val();
+      var values = [];
+      var index = 0;
+      var value = '';
+      $select.on('change', function () {
+        value = $select.val();
+        if (value && values.indexOf(value) === -1) {
+          var $option = $parent.find('option[value="' + value + '"]');
+          var $optionData = schema.parseData($option.data());
+          if ($optionData.empty) {
+            $output.find('span > :last-child').click();
+            values.length = 0;
+          } else {
+            var text = $option.text() || value;
+            $output.append($span.clone().prepend(text));
+            if ($select.is('input')) {
+              $select.val('');
+            }
+            values.push(value);
+            schema.trigger(events.sprite, $output.find('i'));
+          }
+        }
+      });
+      $output.on('click', 'span > :last-child', function () {
+        var $span = $(this).parent();
+        if (!required || values.length > 1) {
+          index = $span.prevAll().length;
+          values.splice(index, 1);
+          $span.remove();
+        }
+      });
+      $output.on('dragstart', 'span', function (event) {
+        var $span = $(this);
+        index = $span.prevAll().length;
+        value = $span.text();
+        event.dataTransfer.setData('text/html', $span.html());
+      });
+      $output.on('dragover', 'span', function (event) {
+        if (event.dataTransfer.types == 'text/html') {
+          event.preventDefault();
+        }
+      });
+      $output.on('drop', 'span', function (event) {
+        var $target = $(event.target);
+        var html = $target.html();
+        var text = $target.text();
+        if (text && value) {
+          values[index] = text;
+          values[$target.prevAll().length] = value;
+          $target.html(event.dataTransfer.getData('text/html'));
+          $output.find('span').eq(index).html(html);
+          schema.trigger(events.sprite, $output.find('i'));
+        }
+        return false;
+      });
+      $form.on('submit', function () {
+        $input.val(values.join(','));
+        return true;
+      });
+      if (init) {
+        init.split(',').forEach(function (value) {
+          $select.val(value).change();
+        });
+      }
+      $select.change();
+      $span.remove();
+    });
+    $.event.addProp('dataTransfer');
   };
 
 })(jQuery);
@@ -887,7 +977,7 @@ var schema = jQuery.isPlainObject(schema) ? schema : {};
         var $emoji = $data.emoji.replace(/\/*$/, '/');
         var $height = Math.round(+$this.css('font-size').slice(0, -2) * 1.4);
         $this.html($this.html().replace(emoji, function (str, p1, p2, p3) {
-          var template = '${sep}<img src="${src}" height=${height} alt="${alt}" title="${title}" />';
+          var template = '${sep}<img src="${src}" height=${height} alt="${alt}" title="${title}">';
           return schema.format(template, {
             sep: p1,
             src: $emoji + p3.replace(/\_/g, '-') + '.svg',
